@@ -6,26 +6,26 @@ using MessageSocket.Net;
 
 namespace MessageSocket.Server
 {
-	public abstract class ServicePeerBase  : IServicePeer
+	public abstract class ServicePeerBase : IServicePeer
 	{
 		private readonly Stream _stream;
-		private readonly PacketBufferManager  _bufferManager;
+		private readonly PacketBufferManager _bufferManager;
 		private readonly CancellationTokenSource _canncelSource = new CancellationTokenSource();
-		private readonly IMessageSerializer _packetFactory;
+		private readonly IMessageSerializer _serializer;
 		private bool _disposed;
 
 		public event EventHandler Closed;
 
-		protected ServicePeerBase(Stream stream, IMessageSerializer packetFactory)
+		protected ServicePeerBase(Stream stream, IMessageSerializer serializer)
 		{
 			_stream = stream;
-			_bufferManager = new PacketBufferManager(packetFactory);
-			_packetFactory = packetFactory;
+			_bufferManager = new PacketBufferManager(serializer);
+			_serializer = serializer;
 		}
 
 		public void Start()
 		{
-			var unused1 = ReceiveRunner .RunReceiveAsync(_stream, _bufferManager, OnPacketsReceived,
+			var unused1 = ReceiveRunner.RunReceiveAsync(_stream, _bufferManager, OnPacketsReceived,
 				_canncelSource.Token);
 			var unused2 = unused1.ContinueWith(tsk => Dispose());
 		}
@@ -44,14 +44,17 @@ namespace MessageSocket.Server
 
 		public async Task SendAsync(object packet)
 		{
-			var bytes = _packetFactory.Serialize(packet);
+			if (_disposed)
+				throw new ObjectDisposedException(GetType().Name);
+
+			var bytes = _serializer.Serialize(packet);
 			await SendAsync(bytes);
 		}
 
 		private async Task SendAsync(byte[] data)
 		{
 			if (_disposed)
-				throw new ObjectDisposedException(this.GetType().Name);
+				throw new ObjectDisposedException(GetType().Name);
 
 			var lengthBytes = BitConverter.GetBytes(data.Length);
 			await _stream.WriteAsync(lengthBytes, 0, lengthBytes.Length);

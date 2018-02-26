@@ -6,10 +6,10 @@ using MessageSocket.Net;
 
 namespace MessageSocket.Client
 {
-	public abstract class SocketClientBase
+	public abstract class SocketClientBase<TPacket>
 	{
-		private readonly PacketBufferManager _bufferManager;
-		private readonly IMessageSerializer _serializer;
+		private readonly PacketBufferManager<TPacket> _bufferManager;
+		private readonly IMessageSerializer<TPacket> _serializer;
 		private readonly string _host;
 		private readonly int _port;
 		private readonly SemaphoreSlim _connectLock = new SemaphoreSlim(1);
@@ -23,11 +23,11 @@ namespace MessageSocket.Client
 		public event EventHandler Closed;
 		public event EventHandler Connected;
 
-		protected SocketClientBase(string host, int port, IMessageSerializer serializer)
+		protected SocketClientBase(string host, int port, IMessageSerializer<TPacket> serializer)
 		{
 			_host = host;
 			_port = port;
-			_bufferManager = new PacketBufferManager(serializer);
+			_bufferManager = new PacketBufferManager<TPacket>(serializer);
 			_serializer = serializer;
 		}
 
@@ -55,7 +55,7 @@ namespace MessageSocket.Client
 				_stream = _client.GetStream();
 				_canncelSource = new CancellationTokenSource();
 
-				var unused1 = ReceiveRunner.RunReceiveAsync(_stream, _bufferManager, OnPacketsReceived,
+				var unused1 = ReceiveRunner<TPacket>.RunReceiveAsync(_stream, _bufferManager, OnPacketsReceived,
 					_canncelSource.Token);
 				var unused2 = unused1.ContinueWith(tsk => Dispose());
 			}
@@ -67,7 +67,7 @@ namespace MessageSocket.Client
 
 		protected abstract void OnPacketsReceived(object[] packets);
 
-		public async Task SendAsync(object packet)
+		public async Task SendAsync(TPacket packet)
 		{
 			if (_disposed)
 				throw new ObjectDisposedException(GetType().Name);

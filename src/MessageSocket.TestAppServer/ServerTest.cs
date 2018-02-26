@@ -12,15 +12,15 @@ namespace MessageSocket.TestAppServer
 		public void Test()
 		{
 			var server = new SocketServer(new IPEndPoint(IPAddress.Any, 1001),
-				stream => new TestPeerService(stream));
+				stream => new TestServicePeer(stream));
 			server.Start();
 
 			Console.ReadLine();
 		}
 
-		public class TestPeerService : MessagePeerService
+		public class TestServicePeer : MessageServicePeer<object>
 		{
-			public TestPeerService(Stream stream) : base(stream, typeof(MessagePacket).Assembly)
+			public TestServicePeer(Stream stream) : base(stream, typeof(MessagePacket).Assembly)
 			{
 			}
 

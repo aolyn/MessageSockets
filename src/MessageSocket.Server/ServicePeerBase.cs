@@ -6,26 +6,26 @@ using MessageSocket.Net;
 
 namespace MessageSocket.Server
 {
-	public abstract class ServicePeerBase : IServicePeer
+	public abstract class ServicePeerBase<TPacket> : IServicePeer
 	{
 		private readonly Stream _stream;
-		private readonly PacketBufferManager _bufferManager;
+		private readonly PacketBufferManager<TPacket> _bufferManager;
 		private readonly CancellationTokenSource _canncelSource = new CancellationTokenSource();
-		private readonly IMessageSerializer _serializer;
+		private readonly IMessageSerializer<TPacket> _serializer;
 		private bool _disposed;
 
 		public event EventHandler Closed;
 
-		protected ServicePeerBase(Stream stream, IMessageSerializer serializer)
+		protected ServicePeerBase(Stream stream, IMessageSerializer<TPacket> serializer)
 		{
 			_stream = stream;
-			_bufferManager = new PacketBufferManager(serializer);
+			_bufferManager = new PacketBufferManager<TPacket>(serializer);
 			_serializer = serializer;
 		}
 
 		public void Start()
 		{
-			var unused1 = ReceiveRunner.RunReceiveAsync(_stream, _bufferManager, OnPacketsReceived,
+			var unused1 = ReceiveRunner<TPacket>.RunReceiveAsync(_stream, _bufferManager, OnPacketsReceived,
 				_canncelSource.Token);
 			var unused2 = unused1.ContinueWith(tsk => Dispose());
 		}
@@ -42,7 +42,7 @@ namespace MessageSocket.Server
 		{
 		}
 
-		public async Task SendAsync(object packet)
+		public async Task SendAsync(TPacket packet)
 		{
 			if (_disposed)
 				throw new ObjectDisposedException(GetType().Name);

@@ -5,12 +5,17 @@ using MessageSocket.Net.Common;
 
 namespace MessageSocket.Net
 {
-	public class MessageSocketClient : SocketClient
+	public class MessageSocketClient<TPacket> : SocketClient<TPacket>
 	{
 		public event EventHandler<PacketReceivedEventArgs> PacketReceived;
 
 		public MessageSocketClient(string host, int port, Assembly messageAssembly)
-			: base(host, port, new ProtobufMessageSerializer(new PacketTypeManager(messageAssembly)))
+			: this(host, port, new ProtobufMessageSerializer<TPacket>(new PacketTypeManager(messageAssembly)))
+		{
+		}
+
+		public MessageSocketClient(string host, int port, IMessageSerializer<TPacket> packetFactory)
+			: base(host, port, packetFactory)
 		{
 		}
 

@@ -4,7 +4,7 @@ using ProtoBuf;
 
 namespace MessageSocket.Net.Common
 {
-	public class ProtobufMessageSerializer : IMessageSerializer
+	public class ProtobufMessageSerializer<TPacket> : IMessageSerializer<TPacket>
 	{
 		private readonly IPacketTypeManager _typeManager;
 
@@ -13,17 +13,17 @@ namespace MessageSocket.Net.Common
 			_typeManager = typeManager;
 		}
 
-		public object Deseriaize(Stream stream, int count)
+		public TPacket Deseriaize(Stream stream, int count)
 		{
 			var lengthBytes = new byte[2];
 			stream.Read(lengthBytes, 0, 2);
 			var messageType = BitConverter.ToUInt16(lengthBytes, 0);
 			var type = _typeManager.GetPacketType(messageType);
-			var obj = Serializer.Deserialize(type, stream);
+			var obj = (TPacket)Serializer.Deserialize(type, stream);
 			return obj;
 		}
 
-		public byte[] Serialize(object packet)
+		public byte[] Serialize(TPacket packet)
 		{
 			using (var ms = new MemoryStream())
 			{

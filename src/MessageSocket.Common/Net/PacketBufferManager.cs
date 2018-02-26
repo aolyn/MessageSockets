@@ -6,14 +6,14 @@ using Aolyn.IO;
 
 namespace MessageSocket.Net
 {
-	public class PacketBufferManager
+	public class PacketBufferManager<TPacket>
 	{
 		private const int MaxPacketLength = 1024 * 1024 * 1024;
 		private readonly ArraySegmentStream _bufferStream = new ArraySegmentStream();
-		private readonly IMessageSerializer _packetFactory;
+		private readonly IMessageSerializer<TPacket> _packetFactory;
 		private List<ArraySegment<byte>> _datas = new List<ArraySegment<byte>>();
 
-		public PacketBufferManager(IMessageSerializer packetFactory)
+		public PacketBufferManager(IMessageSerializer<TPacket> packetFactory)
 		{
 			_packetFactory = packetFactory ?? throw new ArgumentNullException(nameof(packetFactory));
 		}

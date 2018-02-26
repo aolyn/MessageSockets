@@ -2,18 +2,18 @@
 
 namespace MessageSocket.Net.Common
 {
-	public class ByteMessageSerializer : IMessageSerializer
+	public class ByteMessageSerializer : IMessageSerializer<byte[]>
 	{
-		public object Deseriaize(Stream stream, int count)
+		public byte[] Deseriaize(Stream stream, int count)
 		{
 			var bytes = new byte[count];
 			var unused = stream.Read(bytes, 0, count);
 			return bytes;
 		}
 
-		public byte[] Serialize(object packet)
+		public byte[] Serialize(byte[] packet)
 		{
-			return (byte[])packet;
+			return packet;
 		}
 	}
 }

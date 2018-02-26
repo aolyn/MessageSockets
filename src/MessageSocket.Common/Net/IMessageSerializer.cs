@@ -2,9 +2,9 @@
 
 namespace MessageSocket.Net
 {
-	public interface IMessageSerializer
+	public interface IMessageSerializer<TPacket>
 	{
-		object Deseriaize(Stream stream, int count);
-		byte[] Serialize(object packet);
+		TPacket Deseriaize(Stream stream, int count);
+		byte[] Serialize(TPacket packet);
 	}
 }

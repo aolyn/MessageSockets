@@ -8,8 +8,6 @@ namespace MessageSocket.Test.Message
 	[Message(Type = (ushort)PacketType.Message)]
 	public class MessagePacket
 	{
-		//public override PacketType Type => PacketType.Message;
-
 		[ProtoMember(1)]
 		public int Id { get; set; }
 

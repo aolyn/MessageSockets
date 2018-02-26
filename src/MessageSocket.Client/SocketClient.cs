@@ -2,9 +2,9 @@
 
 namespace MessageSocket.Client
 {
-	public class SocketClient : SocketClientBase
+	public class SocketClient<TPacket> : SocketClientBase<TPacket>
 	{
-		public SocketClient(string host, int port, IMessageSerializer packetFactory)
+		public SocketClient(string host, int port, IMessageSerializer<TPacket> packetFactory)
 			: base(host, port, packetFactory)
 		{
 		}

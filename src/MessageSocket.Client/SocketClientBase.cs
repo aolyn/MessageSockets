@@ -6,10 +6,10 @@ using MessageSocket.Net;
 
 namespace MessageSocket.Client
 {
-	public abstract class SocketClientBase<TPacket>
+	public abstract class SocketClientBase
 	{
-		private readonly PacketBufferManager<TPacket> _bufferManager;
-		private readonly IPacketFactory<TPacket> _packetFactory;
+		private readonly PacketBufferManager _bufferManager;
+		private readonly IMessageSerializer _packetFactory;
 		private readonly string _host;
 		private readonly int _port;
 		private readonly SemaphoreSlim _connectLock = new SemaphoreSlim(1);
@@ -23,11 +23,11 @@ namespace MessageSocket.Client
 		public event EventHandler Closed;
 		public event EventHandler Connected;
 
-		protected SocketClientBase(string host, int port, IPacketFactory<TPacket> packetFactory)
+		protected SocketClientBase(string host, int port, IMessageSerializer packetFactory)
 		{
 			_host = host;
 			_port = port;
-			_bufferManager = new PacketBufferManager<TPacket>(packetFactory);
+			_bufferManager = new PacketBufferManager(packetFactory);
 			_packetFactory = packetFactory;
 		}
 
@@ -55,7 +55,7 @@ namespace MessageSocket.Client
 				_stream = _client.GetStream();
 				_canncelSource = new CancellationTokenSource();
 
-				var unused1 = ReceiveRunner<TPacket>.RunReceiveAsync(_stream, _bufferManager, OnPacketsReceived,
+				var unused1 = ReceiveRunner.RunReceiveAsync(_stream, _bufferManager, OnPacketsReceived,
 					_canncelSource.Token);
 				var unused2 = unused1.ContinueWith(tsk => Dispose());
 			}
@@ -65,9 +65,9 @@ namespace MessageSocket.Client
 			}
 		}
 
-		protected abstract void OnPacketsReceived(TPacket[] packets);
+		protected abstract void OnPacketsReceived(object[] packets);
 
-		public async Task SendAsync(TPacket packet)
+		public async Task SendAsync(object packet)
 		{
 			var bytes = _packetFactory.Serialize(packet);
 			await SendAsync(bytes);

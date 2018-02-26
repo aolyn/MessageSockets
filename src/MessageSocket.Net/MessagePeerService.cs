@@ -5,15 +5,14 @@ using MessageSocket.Server;
 
 namespace MessageSocket.Net
 {
-	public class MessagePeerService : ServicePeerBase<IMessage>
+	public class MessagePeerService : ServicePeerBase
 	{
 		public MessagePeerService(Stream stream, Assembly messageAssembly)
-			: base(stream, new MessagePacketFactory(new ProtobufMessageSerializer(
-				new PacketTypeManager(messageAssembly))))
+			: base(stream, new ProtobufMessageSerializer(new PacketTypeManager(messageAssembly)))
 		{
 		}
 
-		public override void OnMessageReceived(IMessage packet)
+		public override void OnMessageReceived(object packet)
 		{
 		}
 	}

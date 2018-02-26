@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace MessageSocket.Net.Common
+namespace MessageSocket.Net
 {
 	public interface IMessageSerializer
 	{

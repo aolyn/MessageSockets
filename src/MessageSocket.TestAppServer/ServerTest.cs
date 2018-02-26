@@ -2,11 +2,10 @@ using System;
 using System.IO;
 using System.Net;
 using MessageSocket.Net;
-using MessageSocket.Net.Common;
 using MessageSocket.Server;
 using MessageSocket.Test.Message;
 
-namespace MessageSocket.TestApp
+namespace MessageSocket.TestAppServer
 {
 	public class ServerTest
 	{
@@ -25,7 +24,7 @@ namespace MessageSocket.TestApp
 			{
 			}
 
-			public override async void OnMessageReceived(IMessage packet)
+			public override async void OnMessageReceived(object packet)
 			{
 				if (packet is MessagePacket messagePacket)
 				{

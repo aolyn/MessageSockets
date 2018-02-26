@@ -6,7 +6,7 @@ namespace MessageSocket.Test.Message
 {
 	[ProtoContract]
 	[Message(Type = (ushort)PacketType.Message)]
-	public class MessagePacket : IMessage
+	public class MessagePacket
 	{
 		//public override PacketType Type => PacketType.Message;
 

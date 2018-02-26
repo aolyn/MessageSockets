@@ -7,10 +7,10 @@ using MessageSocket.Net;
 
 namespace MessageSocket
 {
-	public class ReceiveRunner<TPacket>
+	public class ReceiveRunner
 	{
-		public static async Task RunReceiveAsync(Stream ss, PacketBufferManager<TPacket> bufferManager,
-			Action<TPacket[]> onPacketsReceived, CancellationToken cannellationToken)
+		public static async Task RunReceiveAsync(Stream ss, PacketBufferManager bufferManager,
+			Action<object[]> onPacketsReceived, CancellationToken cannellationToken)
 		{
 			const int readBufferSize = 1024;
 			var readBuffer = new byte[readBufferSize];

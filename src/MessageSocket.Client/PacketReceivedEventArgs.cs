@@ -2,11 +2,11 @@
 
 namespace MessageSocket.Client
 {
-	public class PacketReceivedEventArgs<TPacket> : EventArgs
+	public class PacketReceivedEventArgs : EventArgs
 	{
-		public TPacket Packet { get; set; }
+		public object Packet { get; set; }
 
-		public PacketReceivedEventArgs(TPacket packet)
+		public PacketReceivedEventArgs(object packet)
 		{
 			Packet = packet;
 		}

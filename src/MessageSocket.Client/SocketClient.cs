@@ -2,14 +2,14 @@
 
 namespace MessageSocket.Client
 {
-	public class SocketClient<TPacket> : SocketClientBase<TPacket>
+	public class SocketClient : SocketClientBase
 	{
-		public SocketClient(string host, int port, IPacketFactory<TPacket> packetFactory)
+		public SocketClient(string host, int port, IMessageSerializer packetFactory)
 			: base(host, port, packetFactory)
 		{
 		}
 
-		protected override void OnPacketsReceived(TPacket[] packets)
+		protected override void OnPacketsReceived(object[] packets)
 		{
 		}
 	}

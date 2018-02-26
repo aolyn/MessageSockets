@@ -3,7 +3,7 @@ using System.IO;
 using MessageSocket.Net;
 using MessageSocket.Test.Message;
 
-namespace MessageSocket.TestApp
+namespace MessageSocket.TestAppServer
 {
 	class Program
 	{

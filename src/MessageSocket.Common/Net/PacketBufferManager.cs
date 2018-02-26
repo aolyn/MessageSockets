@@ -6,19 +6,19 @@ using Aolyn.IO;
 
 namespace MessageSocket.Net
 {
-	public class PacketBufferManager<TPacket>
+	public class PacketBufferManager
 	{
 		private const int MaxPacketLength = 1024 * 1024 * 1024;
 		private readonly ArraySegmentStream _bufferStream = new ArraySegmentStream();
-		private readonly IPacketFactory<TPacket> _packetFactory;
+		private readonly IMessageSerializer _packetFactory;
 		private List<ArraySegment<byte>> _datas = new List<ArraySegment<byte>>();
 
-		public PacketBufferManager(IPacketFactory<TPacket> packetFactory)
+		public PacketBufferManager(IMessageSerializer packetFactory)
 		{
 			_packetFactory = packetFactory ?? throw new ArgumentNullException(nameof(packetFactory));
 		}
 
-		public TPacket[] ReadPackets(byte[] data, int offset, int count)
+		public object[] ReadPackets(byte[] data, int offset, int count)
 		{
 			var temp = _datas.ToList();
 			temp.Add(new ArraySegment<byte>(data, offset, count));
@@ -33,7 +33,7 @@ namespace MessageSocket.Net
 			}
 
 			_bufferStream.Reset(temp.ToArray());
-			var packets = new List<TPacket>();
+			var packets = new List<object>();
 			while (true)
 			{
 				var lengthBytes = new byte[4];
@@ -72,7 +72,7 @@ namespace MessageSocket.Net
 				}
 
 				_bufferStream.Read(lengthBytes, 0, 4);
-				var pb = _packetFactory.ReadPacket(_bufferStream, packetLength);
+				var pb = _packetFactory.Deseriaize(_bufferStream, packetLength);
 				packets.Add(pb);
 
 				if (_bufferStream.Length == _bufferStream.Position) //all byte read

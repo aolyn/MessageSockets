@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MessageSocket.Net\MessageSocket.Net.csproj" />
+    <ProjectReference Include="..\MessageSocket.Test.Message\MessageSocket.Test.Message.csproj" />
+  </ItemGroup>
+
+</Project>

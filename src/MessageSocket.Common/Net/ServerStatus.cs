@@ -4,7 +4,6 @@ namespace MessageSocket.Net
 	{
 		Running,
 		Unstart,
-		Paused,
 		Closed
 	}
 }

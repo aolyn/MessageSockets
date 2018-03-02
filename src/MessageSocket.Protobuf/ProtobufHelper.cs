@@ -8,7 +8,7 @@ using ProtoBuf;
 
 #endif
 
-namespace MessageSocket.Net
+namespace MessageSocket.Protobuf
 {
 	public class ProtobufHelper
 	{

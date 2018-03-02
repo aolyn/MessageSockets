@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MessageSocket.Net\MessageSocket.Net.csproj" />
+    <ProjectReference Include="..\MessageSocket.Protobuf\MessageSocket.Protobuf.csproj" />
     <ProjectReference Include="..\MessageSocket.Test.Message\MessageSocket.Test.Message.csproj" />
   </ItemGroup>
 

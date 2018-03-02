@@ -1,16 +1,21 @@
 ﻿using System;
 using System.IO;
-using ProtoBuf;
 
 namespace MessageSocket.Net.Common
 {
-	public class ProtobufMessageSerializer<TPacket> : IMessageSerializer<TPacket>
+	/// <summary>
+	/// Protobuf MessageSerializer
+	/// </summary>
+	/// <typeparam name="TPacket"></typeparam>
+	public class MessageSerializer<TPacket> : IMessageSerializer<TPacket>
 	{
 		private readonly IPacketTypeManager _typeManager;
+		private readonly ISerializer _serializer;
 
-		public ProtobufMessageSerializer(IPacketTypeManager typeManager)
+		public MessageSerializer(IPacketTypeManager typeManager, ISerializer serializer)
 		{
 			_typeManager = typeManager;
+			_serializer = serializer;
 		}
 
 		public TPacket Deseriaize(Stream stream, int count)
@@ -19,7 +24,8 @@ namespace MessageSocket.Net.Common
 			stream.Read(lengthBytes, 0, 2);
 			var messageType = BitConverter.ToUInt16(lengthBytes, 0);
 			var type = _typeManager.GetPacketType(messageType);
-			var obj = (TPacket)Serializer.Deserialize(type, stream);
+			var obj = (TPacket)_serializer.Deserialize(stream, type);
+
 			return obj;
 		}
 
@@ -30,7 +36,7 @@ namespace MessageSocket.Net.Common
 				var packetType = _typeManager.GetPacketType(packet.GetType());
 				var messageTypeBytes = BitConverter.GetBytes(packetType);
 				ms.Write(messageTypeBytes, 0, messageTypeBytes.Length);
-				Serializer.Serialize(ms, packet);
+				_serializer.Serialize(packet, ms);
 				return ms.ToArray();
 			}
 		}

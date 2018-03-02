@@ -86,12 +86,11 @@ namespace MessageSocket.Net
 
 		private async Task StartPeerAsync(Socket socket)
 		{
-			var nets = new NetworkStream(socket, true);
+			var netStream = new NetworkStream(socket, true);
 			Stream destSteam = null;
 			try
 			{
-				destSteam = await GetStreamAsync(nets);
-
+				destSteam = await GetStreamAsync(netStream);
 				try
 				{
 					var nip = GetServerPeer(destSteam);
@@ -108,7 +107,7 @@ namespace MessageSocket.Net
 			catch (IOException ex)
 			{
 				//Logger.Debug($"StartPeer failed: " + ex);
-				nets.Dispose();
+				netStream.Dispose();
 				destSteam?.Dispose();
 			}
 		}

@@ -1,5 +1,7 @@
 ﻿using System;
-using MessageSocket.Net;
+using MessageSocket.Client;
+using MessageSocket.Net.Common;
+using MessageSocket.Protobuf;
 using MessageSocket.Test.Message;
 
 namespace MessageSocket.TestAppClient
@@ -16,7 +18,13 @@ namespace MessageSocket.TestAppClient
 
 		private static async System.Threading.Tasks.Task TestAsync()
 		{
-			var client = new MessageSocketClient<object>("127.0.0.1", 1001, typeof(MessagePacket).Assembly);
+			var serializer1 = new MessageSerializer<object>(new PacketTypeManager(typeof(MessagePacket).Assembly),
+				new ProtobufSerializer());
+
+			var serializer = new MessageSerializer<object>(
+				new PacketTypeManager(typeof(MessagePacket).Assembly), new ProtobufSerializer());
+
+			var client = new SocketClient<object>("127.0.0.1", 1001, serializer);
 			client.PacketReceived += (s, p) =>
 			{
 				Console.WriteLine($"message packet received {p.Packet}");

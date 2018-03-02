@@ -12,7 +12,8 @@ namespace MessageSocket.Server
 		private readonly PacketBufferManager<TPacket> _bufferManager;
 		private readonly CancellationTokenSource _canncelSource = new CancellationTokenSource();
 		private readonly IMessageSerializer<TPacket> _serializer;
-		private bool _disposed;
+
+		private volatile bool _disposed;
 
 		public event EventHandler Closed;
 
@@ -69,6 +70,8 @@ namespace MessageSocket.Server
 			_canncelSource.Cancel();
 			_stream.Dispose();
 			Closed?.Invoke(this, new EventArgs());
+			_stream.Dispose();
+			_stream.Close();
 		}
 	}
 }

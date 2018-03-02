@@ -1,7 +1,8 @@
 using System;
 using System.IO;
 using System.Net;
-using MessageSocket.Net;
+using MessageSocket.Net.Common;
+using MessageSocket.Protobuf;
 using MessageSocket.Server;
 using MessageSocket.Test.Message;
 
@@ -18,9 +19,12 @@ namespace MessageSocket.TestAppServer
 			Console.ReadLine();
 		}
 
-		public class TestServicePeer : MessageServicePeer<object>
+		public class TestServicePeer : ServicePeerBase<object>
 		{
-			public TestServicePeer(Stream stream) : base(stream, typeof(MessagePacket).Assembly)
+			private static readonly MessageSerializer<object> Serializer = new MessageSerializer<object>(
+				new PacketTypeManager(typeof(MessagePacket).Assembly), new ProtobufSerializer());
+
+			public TestServicePeer(Stream stream) : base(stream, Serializer)
 			{
 			}
 

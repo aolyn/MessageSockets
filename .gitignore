@@ -1,11 +1,5 @@
-/src/SeQServer/SeQ.Web/*.user
 /src/SeQServer/*.userprefs
-/src/SeQServer/SeQServer/*.user
-/src/SeQServer/SeQ.Server/*.user
-/src/SeQServer/SeQServer.DAL/*.user
-/src/SeQServer/SeQServer.Model/*.user
 /src/SeQServer/*.cache
-/src/SeQServer/*.suo
 /Lidgren.Network
 /lidgren-network-gen3-2013-05-07
 /src/SeQServer
@@ -17,6 +11,7 @@ src/library/
 *.user
 
 .vs/
+.vscode/
 bin/
 obj/
 logs

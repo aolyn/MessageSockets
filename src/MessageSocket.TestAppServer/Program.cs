@@ -1,7 +1,4 @@
 ﻿using System;
-using System.IO;
-using MessageSocket.Protobuf;
-using MessageSocket.Test.Message;
 
 namespace MessageSocket.TestAppServer
 {
@@ -9,29 +6,29 @@ namespace MessageSocket.TestAppServer
 	{
 		static void Main(string[] args)
 		{
-			ProtobufTest();
+			//ProtobufTest();
 
 			new ServerTest().Test();
 
 			Console.WriteLine("Hello World!");
 		}
 
-		private static void ProtobufTest()
-		{
-			var msg = new MessagePacket
-			{
-				Id = 1,
-				Content = "hello " + DateTime.Now,
-				SentDate = DateTime.Now,
-			};
-			var bytes1 = ProtobufHelper.Serialize(null);
-			var bytes = ProtobufHelper.Serialize(msg);
-			var dobj = ProtobufHelper.Deserialize<MessagePacket>(bytes);
-			var ms = new MemoryStream();
-			ms.Write(BitConverter.GetBytes(12345), 0, 4);
-			ms.Write(bytes, 0, bytes.Length);
-			ms.Position = 4;
-			var dobj2 = ProtobufHelper.Deserialize<MessagePacket>(ms);
-		}
+		//private static void ProtobufTest()
+		//{
+		//	var msg = new MessagePacket
+		//	{
+		//		Id = 1,
+		//		Content = "hello " + DateTime.Now,
+		//		SentDate = DateTime.Now,
+		//	};
+		//	var bytes1 = ProtobufHelper.Serialize(null);
+		//	var bytes = ProtobufHelper.Serialize(msg);
+		//	var dobj = ProtobufHelper.Deserialize<MessagePacket>(bytes);
+		//	var ms = new MemoryStream();
+		//	ms.Write(BitConverter.GetBytes(12345), 0, 4);
+		//	ms.Write(bytes, 0, bytes.Length);
+		//	ms.Position = 4;
+		//	var dobj2 = ProtobufHelper.Deserialize<MessagePacket>(ms);
+		//}
 	}
 }

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Aolyn</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="aolyn.io" Version="1.0.1" />
+    <PackageReference Include="log4net" Version="2.0.8" />
+  </ItemGroup>
+
+</Project>

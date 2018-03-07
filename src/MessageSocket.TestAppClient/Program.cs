@@ -1,7 +1,7 @@
 ﻿using System;
-using MessageSocket.Client;
-using MessageSocket.Net.Common;
-using MessageSocket.Protobuf;
+using Aolyn.Net.MessageSockets.Client;
+using Aolyn.Net.MessageSockets.Common;
+using Aolyn.Net.MessageSockets.Protobuf;
 using MessageSocket.Test.Message;
 
 namespace MessageSocket.TestAppClient
@@ -18,11 +18,11 @@ namespace MessageSocket.TestAppClient
 
 		private static async System.Threading.Tasks.Task TestAsync()
 		{
-			var serializer1 = new MessageSerializer<object>(new PacketTypeManager(typeof(MessagePacket).Assembly),
+			var serializer1 = new MessageSerializer<object>(new MessageTypeManager(typeof(MessagePacket).Assembly),
 				new ProtobufSerializer());
 
 			var serializer = new MessageSerializer<object>(
-				new PacketTypeManager(typeof(MessagePacket).Assembly), new ProtobufSerializer());
+				new MessageTypeManager(typeof(MessagePacket).Assembly), new ProtobufSerializer());
 
 			var client = new SocketClient<object>("127.0.0.1", 1001, serializer);
 			client.PacketReceived += (s, p) =>

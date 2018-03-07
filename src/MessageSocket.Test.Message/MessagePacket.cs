@@ -1,5 +1,5 @@
 ﻿using System;
-using MessageSocket.Net.Common;
+using Aolyn.Net.MessageSockets.Common;
 using ProtoBuf;
 
 namespace MessageSocket.Test.Message

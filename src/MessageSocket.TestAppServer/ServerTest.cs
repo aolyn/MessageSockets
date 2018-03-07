@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Net;
-using MessageSocket.Net.Common;
-using MessageSocket.Protobuf;
-using MessageSocket.Server;
+using Aolyn.Net.MessageSockets.Common;
+using Aolyn.Net.MessageSockets.Protobuf;
+using Aolyn.Net.MessageSockets.Server;
 using MessageSocket.Test.Message;
 
 namespace MessageSocket.TestAppServer
@@ -22,7 +22,7 @@ namespace MessageSocket.TestAppServer
 		public class TestServicePeer : ServicePeerBase<object>
 		{
 			private static readonly MessageSerializer<object> Serializer = new MessageSerializer<object>(
-				new PacketTypeManager(typeof(MessagePacket).Assembly), new ProtobufSerializer());
+				new MessageTypeManager(typeof(MessagePacket).Assembly), new ProtobufSerializer());
 
 			public TestServicePeer(Stream stream) : base(stream, Serializer)
 			{
